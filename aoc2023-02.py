@@ -24,9 +24,5 @@ for row in data:
 
     powersum = powersum + ans
 
-#12 red cubes, 13 green cubes, and 14 blue cubes
-#What is the sum of the IDs of those games?
-
-
 print('Day 2, part 1:', summ)
 print('Day 2, part 2:', powersum)
