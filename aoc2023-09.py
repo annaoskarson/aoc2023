@@ -1,22 +1,22 @@
 data = [[int(x) for x in line.split()] for line in open('aoc2023-09-input.txt')]
 
 def wrap(lists):
+    # Part 1:
     lists[-1].append(0)
+    # Part 2:
+    lists[-1] = [0] + lists[-1]
+
     l = 2
     while l < len(lists)+1:
+        # Part 1:
         add = lists[-l+1][-1]
         lists[-l].append(lists[-l][-1] + add)
-        l += 1
-    return(lists[0][-1])
-
-def warp(lists):
-    lists[-1] = [0] + lists[-1]
-    l = 2
-    while l < len(lists)+1:
+        # Part 2:
         sub = lists[-l+1][0]
         lists[-l] = [lists[-l][0] - sub] + lists[-l]
+
         l += 1
-    return(lists[0][0])
+    return(lists)
 
 def run(line):
     calc = [line]
@@ -34,8 +34,8 @@ def run(line):
 ans1 = 0
 ans2 = 0
 for line in data:
-    calc = run(line)
-    ans1 += wrap(calc)
-    ans2 += warp(calc)
+    calc = wrap(run(line))
+    ans1 += calc[0][-1]
+    ans2 += calc[0][0]
 print('Day 9, part 1:', ans1)
 print('Day 9, part 2:', ans2)
