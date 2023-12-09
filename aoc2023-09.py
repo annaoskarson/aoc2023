@@ -18,13 +18,11 @@ def warp(lists):
         l += 1
     return(lists[0][0])
 
-def run(line, part2 = False):
+def run(line):
     calc = [line]
     while True:
         if all((x == 0 for x in calc[-1])):
-            if part2:
-                return(warp(calc))
-            return(wrap(calc))
+            return(calc)
         last = calc[-1]
         i = 0
         diffs = []
@@ -36,7 +34,8 @@ def run(line, part2 = False):
 ans1 = 0
 ans2 = 0
 for line in data:
-    ans1 += run(line)
-    ans2 += run(line, True)
+    calc = run(line)
+    ans1 += wrap(calc)
+    ans2 += warp(calc)
 print('Day 9, part 1:', ans1)
 print('Day 9, part 2:', ans2)
