@@ -26,4 +26,5 @@ for x in startfield:
 
 # Tried the lcm method, and it worked. Otherwise, had to check
 # if two starts share loop or something ... If that is even possible.
+# Or if they start mid-loop or something.
 print('Day 8, part 2:', math.lcm(*points))
