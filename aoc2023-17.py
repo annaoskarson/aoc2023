@@ -1,3 +1,4 @@
+import heapq
 data = [x.strip() for x in open('aoc2023-17-input.txt')]
 
 maze = {}
@@ -7,25 +8,25 @@ for r, row in enumerate(data):
         maze[(r,c)] = int(ch)
 goal = (r,c)
 
-def inside(p): # r, c
+def inside(p): # (r, c)
     global start, goal
     return(all([start[0] <= p[0] <= goal[0], start[1] <= p[1] <= goal[1]]))
 
 def step(fr, d):
     return(fr[0] + d[0], fr[1] + d[1])
 
-# In the Q, have [((r, c), (dr, dc), st, heat)]
+# In the Q, have [(heat, (r, c), (dr, dc), st)]
 # st is number of steps in the same direction.
 
-def solve(Q, part2 = False):
-    global heatmap
+def solve(part2 = False):
+    Q = []
+    heapq.heappush(Q, (0, start, (0,1), 0))
+    heapq.heappush(Q, (0, start, (1,0), 0))
+    heatmap = {} # For storing lowest heats at different points.
     while Q:
-
-        Q.sort(key=lambda tup: tup[3])
         
-        p, d, s, h = Q.pop(0) # p = point, d = direction, s = steps straight to point, h = heat including point
+        h, p, d, s = heapq.heappop(Q) # p = point, d = direction, s = steps straight to point, h = heat including point
         if p == goal:
-            print()
             return(h)
 
         if (p, d, s) not in heatmap.keys() or h < heatmap[(p, d, s)]:
@@ -36,19 +37,13 @@ def solve(Q, part2 = False):
  
                 h2 = h + maze[(p2)]
 
-                Q.append((p2, d, s2, h2)) # Continue in the same direction.
-                # directions: d2a = dc, dr and d2b = -dc, -dr
+                heapq.heappush(Q, (h2, p2, d, s2)) # Continue in the same direction.
                 if not part2 or (part2 and s2 >= 4):
                     d2a = d[1], d[0]
                     d2b = -d[1], -d[0]
-                    Q.append((p2, d2a, 0, h2)) # Other direction 2a.
-                    Q.append((p2, d2b, 0, h2)) # Other direction 2b.
+                    heapq.heappush(Q, (h2, p2, d2a, 0)) # Other direction 2a.
+                    heapq.heappush(Q, (h2, p2, d2b, 0)) # Other direction 2b.
 
-p = [(start, (0,1), 0, 0), (start, (1,0), 0, 0)]
-heatmap = {} # For storing lowest heats at different points.
-print('Day 17, part 1:', solve(p))
+print('Day 17, part 1:', solve())
 
-p = [(start, (0,1), 0, 0), (start, (1,0), 0, 0)]
-print('Day 17, part 2:', solve(p, True))
-
-# This takes ages ... But it works. Should try with a sorted stack of some kind.
+print('Day 17, part 2:', solve(True))
